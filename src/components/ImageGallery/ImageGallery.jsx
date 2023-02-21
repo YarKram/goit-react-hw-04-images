@@ -12,31 +12,24 @@ const ImageGallery = ({ loadMore, page, search }) => {
   const [status, setStatus] = useState('idle');
 
   useEffect(() => {
-    if (search === '') {
-      return;
-    }
-    setStatus('pending');
-    fetchPictures(page, search)
-      .then(res => {
-        setImages(res.data.hits);
-        setStatus('resolved');
-      })
-      .catch(error => console.log(error));
-  }, [search]);
-
-  useEffect(() => {
-    if (page === 1) {
+    if (search === '' && page === 1) {
       return;
     }
 
     setStatus('pending');
     fetchPictures(page, search)
       .then(res => {
-        setImages(prevState => [...prevState, ...res.data.hits]);
+        setImages(prevState => {
+          if (search !== '' && page !== 1) {
+            return [...prevState, ...res.data.hits];
+          }
+          return [...res.data.hits];
+        });
         setStatus('resolved');
+        console.log(res.data.hits);
       })
       .catch(error => console.log(error));
-  }, [page]);
+  }, [search, page]);
 
   return (
     <>

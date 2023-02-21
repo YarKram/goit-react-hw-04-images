@@ -13,14 +13,16 @@ const App = () => {
     setPage(1);
   };
 
-  const onLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
-  };
-
   return (
     <AppWrap>
       <Searchbar onFormSubmit={onSubmit} />
-      <ImageGallery search={search} page={page} loadMore={onLoadMore} />
+      <ImageGallery
+        search={search}
+        page={page}
+        loadMore={() => {
+          setPage(page + 1);
+        }}
+      />
     </AppWrap>
   );
 };
